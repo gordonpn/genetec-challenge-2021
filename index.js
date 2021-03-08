@@ -4,6 +4,7 @@ const {
   ServiceBusMessage,
 } = require("@azure/service-bus");
 const axios = require("axios");
+var azure = require("azure-storage");
 
 const connectionStringPlates =
   "Endpoint=sb://licenseplatepublisher.servicebus.windows.net/;SharedAccessKeyName=ConsumeReads;SharedAccessKey=VNcJZVQAVMazTAfrssP6Irzlg/pKwbwfnOqMXqROtCQ=";
@@ -24,6 +25,14 @@ const sendForValidation = async (
   Longitude
 ) => {
   if (!wantedSet.has(LicensePlate)) {
+    return;
+  }
+
+  const diffInMilliseconds = Math.abs(
+    new Date() - new Date(LicensePlateCaptureTime)
+  );
+
+  if (diffInMilliseconds >= 120000) {
     return;
   }
 
@@ -61,9 +70,12 @@ const getNewWantedPlates = async () => {
         "https://licenseplatevalidator.azurewebsites.net/api/lpr/wantedplates",
       headers: {
         Authorization: "Basic dGVhbTIwOltVaT1EJT9jRFBXMWdRJWs=",
+        // Authorization: "Basic dGVhbTAyOi1BTU1wc25oW251T3IxcFM=",
       },
     });
     console.log(res.data);
+
+    wantedSet.clear();
 
     res.data.forEach((wantedStr) => {
       wantedSet.add(wantedStr);
@@ -115,8 +127,8 @@ async function licensePlateBus() {
       Longitude
     );
 
-    console.log("Longitude", Longitude);
-    console.log("Latitude", Latitude);
+    // console.log("Longitude", Longitude);
+    // console.log("Latitude", Latitude);
     console.log("LicensePlate", LicensePlate);
     console.log("LicensePlateCaptureTime", LicensePlateCaptureTime);
     console.log();
@@ -139,7 +151,7 @@ async function wantedBus() {
   const wantedMessageHandler = async (messageReceived) => {
     const { Url, TotalWantedCount } = messageReceived.body;
     console.log("TotalWantedCount", TotalWantedCount);
-    console.log(" Url", Url);
+    console.log("Url", Url);
     console.log();
     getNewWantedPlates();
   };
