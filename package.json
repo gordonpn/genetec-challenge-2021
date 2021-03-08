@@ -11,6 +11,7 @@
   "author": "Gordon Pham-Nguyen <gordon.pn6@gmail.com> (https://github.com/gordonpn)",
   "license": "MIT",
   "dependencies": {
-    "@azure/service-bus": "^7.0.3"
+    "@azure/service-bus": "^7.0.3",
+    "axios": "^0.21.1"
   }
 }
