@@ -28,13 +28,13 @@ const sendForValidation = async (
     return;
   }
 
-  const diffInMilliseconds = Math.abs(
-    new Date() - new Date(LicensePlateCaptureTime)
-  );
+  // const diffInMilliseconds = Math.abs(
+  //   new Date() - new Date(LicensePlateCaptureTime)
+  // );
 
-  if (diffInMilliseconds >= 120000) {
-    return;
-  }
+  // if (diffInMilliseconds >= 120000) {
+  //   return;
+  // }
 
   try {
     const res = await axios({
