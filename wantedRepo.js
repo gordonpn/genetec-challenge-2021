@@ -1,6 +1,7 @@
 class wantedRepo {
   constructor() {
     this._data = new Set();
+    this._lastTime = undefined;
   }
 
   add(plate) {
@@ -19,6 +20,14 @@ class wantedRepo {
 
   delete(plate) {
     this._data.delete(plate);
+  }
+
+  setLastTime(lastTime) {
+    this._lastTime = lastTime;
+  }
+
+  getLastTime() {
+    return this._lastTime;
   }
 
   has(plate) {
