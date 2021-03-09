@@ -1,5 +1,3 @@
-import { BlobUtilities } from 'azure-storage';
-
 const { BlobServiceClient } = require('@azure/storage-blob');
 
 export default function ImageUploader(licensePlate, imageString) {
