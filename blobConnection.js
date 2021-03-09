@@ -1,5 +1,5 @@
 import { BlobServiceClient } from "@azure/storage-blob";
-import { logToDiscord } from "./logger";
+import { logToDiscord } from "./logger.js";
 
 class blobConnection {
   constructor() {
@@ -29,7 +29,7 @@ class blobConnection {
         console.log("Successfully created container client", res?.errorCode)
       )
       .catch((err) => {
-        logToDiscord(err, true);
+        logToDiscord(err?.code, true);
         console.log(err);
       });
   }

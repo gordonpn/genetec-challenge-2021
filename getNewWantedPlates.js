@@ -47,11 +47,11 @@ const getNewWantedPlates = async () => {
         console.log("Done writing to file");
       })
       .catch((err) => {
-        logToDiscord(err, true);
+        logToDiscord("Caught error in writeToFile", true);
         console.log("Error occurred: ", err);
       });
   } catch (err) {
-    logToDiscord(err, true);
+    logToDiscord("Caught error in getNewWantedPlates", true);
     console.warn("err -----", err?.response?.status, err?.response?.statusText);
   }
 };

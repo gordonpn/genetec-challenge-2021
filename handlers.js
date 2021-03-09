@@ -5,7 +5,7 @@ import sendForValidation from "./sendForValidation.js";
 import wantedRepoInstance from "./wantedRepo.js";
 
 const errorHandler = async (error) => {
-  logToDiscord(error, true);
+  logToDiscord("Caught error in a bus", true);
   console.log(error);
 };
 

@@ -47,19 +47,19 @@ readFromFile()
     console.log("Done reading from file");
   })
   .catch((err) => {
-    logToDiscord(err, true);
+    logToDiscord("Caught error in readFromFile", true);
     console.log("Error occurred: ", err);
     process.exit(1);
   });
 
 wantedBus().catch((err) => {
-  logToDiscord(err, true);
+  logToDiscord("Caught error in wantedBus", true);
   console.log("Error occurred: ", err);
   process.exit(1);
 });
 
 licensePlateBus().catch((err) => {
-  logToDiscord(err, true);
+  logToDiscord("Caught error in licensePlateBus", true);
   console.log("Error occurred: ", err);
   process.exit(1);
 });

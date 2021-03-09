@@ -18,7 +18,7 @@ async function imageUploader(licensePlate, imageString) {
       uploadBlobResponse.requestId
     );
   } catch (err) {
-    logToDiscord(err, true);
+    logToDiscord("Caught error in imageUploader", true);
     console.log(err);
   }
 

@@ -44,7 +44,7 @@ const sendForValidation = async (
     console.log();
     plateRepoInstance.delete(LicensePlate);
   } catch (err) {
-    logToDiscord(err, true);
+    logToDiscord("Caught error in sendForValidation", true);
     console.warn("err -----", err?.response?.status, err?.response?.statusText);
     console.log();
   }
