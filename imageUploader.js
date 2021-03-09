@@ -22,10 +22,6 @@ console.log("Container was created successfully. requestId: ", createContainerRe
 
 /*    we only need to create one container so we need to move everything above somewhere else      */
 
-
-// Using license plate as blob name instead of this below
-// const blobName = 'quickstart' + uuidv1() + '.txt';
-
 // Get a block blob client
 const blockBlobClient = containerClient.getBlockBlobClient(licensePlate);
 
