@@ -40,6 +40,13 @@ const getNewWantedPlates = async () => {
         return;
       }
 
+      console.log(
+        `Sending old plate ${plate.LicensePlate}: ${plate.LicensePlateCaptureTime}`
+      );
+      logToDiscord(
+        `Sending old plate ${plate.LicensePlate}: ${plate.LicensePlateCaptureTime}`
+      );
+
       sendForValidation(...plate);
     });
 
