@@ -2,7 +2,6 @@ import axios from "axios";
 import imageUploader from "./imageUploader.js";
 import { logToDiscord } from "./logger.js";
 import plateRepoInstance from "./platesRepo.js";
-import isExpired from "./timeValidator.js";
 import wantedRepoInstance from "./wantedRepo.js";
 
 const sendForValidation = async (
@@ -17,11 +16,11 @@ const sendForValidation = async (
     return;
   }
 
-  if (isExpired(LicensePlateCaptureTime)) {
-    console.log("Plate expired");
-    logToDiscord(`Wanted to match ${LicensePlate} but it's expired`);
-    return;
-  }
+  // if (isExpired(LicensePlateCaptureTime)) {
+  //   console.log("Plate expired");
+  //   logToDiscord(`Wanted to match ${LicensePlate} but it's expired`);
+  //   return;
+  // }
 
   const contextImgRef = await imageUploader(LicensePlate, ContextImageJpg);
 

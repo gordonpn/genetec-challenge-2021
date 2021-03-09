@@ -1,6 +1,5 @@
 import axios from "axios";
 import { logToDiscord } from "./logger.js";
-import shouldMakeGet from "./passedTime.js";
 import plateRepoInstance from "./platesRepo.js";
 import { writeToFile } from "./readWrite.js";
 import sendForValidation from "./sendForValidation.js";
@@ -9,9 +8,11 @@ import wantedRepoInstance from "./wantedRepo.js";
 const getNewWantedPlates = async () => {
   // -$30 every time this gets called
 
-  if (!shouldMakeGet()) {
-    return;
-  }
+  // if (!shouldMakeGet()) {
+  //   console.log("Skipped wanted plate request")
+  //   logToDiscord("Skipped wanted plate request");
+  //   return;
+  // }
 
   try {
     const res = await axios({
