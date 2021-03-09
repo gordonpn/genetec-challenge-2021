@@ -47,7 +47,13 @@ const getNewWantedPlates = async () => {
         `Sending old plate ${plate.LicensePlate}: ${plate.LicensePlateCaptureTime}`
       );
 
-      sendForValidation(...plate);
+      sendForValidation(
+        plate.LicensePlateCaptureTime,
+        plate.LicensePlate,
+        plate.Latitude,
+        plate.Longitude,
+        plate.ContextImageJpg
+      );
     });
 
     writeToFile(wantedRepoInstance.get())
@@ -60,7 +66,7 @@ const getNewWantedPlates = async () => {
       });
   } catch (err) {
     logToDiscord("Caught error in getNewWantedPlates", true);
-    console.warn("err -----", err?.response?.status, err?.response?.statusText);
+    console.warn("err -----", err);
   }
 };
 
