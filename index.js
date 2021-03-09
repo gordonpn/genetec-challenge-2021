@@ -1,11 +1,9 @@
-const {
-  delay,
-  ServiceBusClient,
-  ServiceBusMessage,
-} = require("@azure/service-bus");
+const { ServiceBusClient } = require("@azure/service-bus");
 const axios = require("axios");
+// @ts-ignore
 const azure = require("azure-storage");
 const fs = require("fs/promises");
+const isExpired = require("./timeValidator.js");
 
 const connectionStringPlates =
   "Endpoint=sb://licenseplatepublisher.servicebus.windows.net/;SharedAccessKeyName=ConsumeReads;SharedAccessKey=VNcJZVQAVMazTAfrssP6Irzlg/pKwbwfnOqMXqROtCQ=";
@@ -30,7 +28,13 @@ const sendForValidation = async (
     return;
   }
 
+  // @ts-ignore
+  if (isExpired(LicensePlateCaptureTime)) {
+    return;
+  }
+
   try {
+    // @ts-ignore
     const res = await axios({
       method: "post",
       url:
@@ -71,6 +75,7 @@ const getNewWantedPlates = async () => {
   // -$30 every time this gets called
 
   try {
+    // @ts-ignore
     const res = await axios({
       method: "get",
       url:
@@ -79,6 +84,7 @@ const getNewWantedPlates = async () => {
         Authorization: "Basic dGVhbTIwOltVaT1EJT9jRFBXMWdRJWs=",
         // Authorization: "Basic dGVhbTAyOi1BTU1wc25oW251T3IxcFM=",
         // Authorization: "Basic dGVhbTA4OjFBSz0kcUc/RDRlUzFGP0o=",
+        // Authorization: "Basic dGVhbTIzOjN4KD1aQmdmK3k9bnZ1P2c= ",
       },
     });
     console.log(res.data);
@@ -126,6 +132,8 @@ async function licensePlateBus() {
       LicensePlate,
       Latitude,
       Longitude,
+      ContextImageJpg,
+      LicensePlateImageJpg,
     } = messageReceived.body;
 
     plateMap.set(LicensePlate, {
@@ -142,6 +150,8 @@ async function licensePlateBus() {
       Longitude
     );
 
+    console.log("LicensePlateImageJpg", LicensePlateImageJpg);
+    console.log("ContextImageJpg", ContextImageJpg);
     // console.log("Longitude", Longitude);
     // console.log("Latitude", Latitude);
     console.log("LicensePlate", LicensePlate);
