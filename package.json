@@ -14,5 +14,6 @@
     "@azure/service-bus": "^7.0.3",
     "axios": "^0.21.1",
     "azure-storage": "^2.10.3"
-  }
+  },
+  "type": "module"
 }

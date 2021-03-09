@@ -1,9 +1,7 @@
-const { ServiceBusClient } = require("@azure/service-bus");
-const axios = require("axios");
-// @ts-ignore
-const azure = require("azure-storage");
-const fs = require("fs/promises");
-const isExpired = require("./timeValidator.js");
+import { ServiceBusClient } from "@azure/service-bus";
+import axios from "axios";
+import { readFile, writeFile } from "fs/promises";
+import isExpired from "./timeValidator.js";
 
 const connectionStringPlates =
   "Endpoint=sb://licenseplatepublisher.servicebus.windows.net/;SharedAccessKeyName=ConsumeReads;SharedAccessKey=VNcJZVQAVMazTAfrssP6Irzlg/pKwbwfnOqMXqROtCQ=";
@@ -61,11 +59,8 @@ const sendForValidation = async (
 const writeToFile = async () => {
   console.log("Deleting contents ", JSON_FILE);
   try {
-    await fs.writeFile(JSON_FILE, "");
-    await fs.writeFile(
-      JSON_FILE,
-      JSON.stringify(Array.from(wantedSet.values()))
-    );
+    await writeFile(JSON_FILE, "");
+    await writeFile(JSON_FILE, JSON.stringify(Array.from(wantedSet.values())));
   } catch (err) {
     console.log("Error writing file", err);
   }
@@ -136,6 +131,8 @@ async function licensePlateBus() {
       LicensePlateImageJpg,
     } = messageReceived.body;
 
+    // console.log(Object.keys(messageReceived.body));
+
     plateMap.set(LicensePlate, {
       LicensePlateCaptureTime,
       LicensePlate,
@@ -150,8 +147,8 @@ async function licensePlateBus() {
       Longitude
     );
 
-    console.log("LicensePlateImageJpg", LicensePlateImageJpg);
-    console.log("ContextImageJpg", ContextImageJpg);
+    // console.log("LicensePlateImageJpg", LicensePlateImageJpg);
+    // console.log("ContextImageJpg", ContextImageJpg);
     // console.log("Longitude", Longitude);
     // console.log("Latitude", Latitude);
     console.log("LicensePlate", LicensePlate);
@@ -191,7 +188,7 @@ async function wantedBus() {
 
 const readFromFile = async () => {
   try {
-    const jsonString = await fs.readFile(JSON_FILE, "utf8");
+    const jsonString = await readFile(JSON_FILE, "utf8");
     console.log("jsonString", jsonString);
     wantedSet = new Set(JSON.parse(jsonString));
   } catch (err) {
