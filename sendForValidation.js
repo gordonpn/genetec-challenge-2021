@@ -18,6 +18,8 @@ const sendForValidation = async (
   }
 
   if (isExpired(LicensePlateCaptureTime)) {
+    console.log("Plate expired");
+    logToDiscord(`Wanted to match ${LicensePlate} but it's expired`);
     return;
   }
 
