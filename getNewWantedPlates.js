@@ -1,4 +1,5 @@
 import axios from "axios";
+import { logToDiscord } from "./logger.js";
 import shouldMakeGet from "./passedTime.js";
 import plateRepoInstance from "./platesRepo.js";
 import { writeToFile } from "./readWrite.js";
@@ -25,6 +26,7 @@ const getNewWantedPlates = async () => {
       },
     });
     console.log(res.data);
+    logToDiscord(`New plates acquired ${res.data}`);
 
     res.data.forEach((wantedStr) => {
       wantedRepoInstance.add(wantedStr);
@@ -45,9 +47,11 @@ const getNewWantedPlates = async () => {
         console.log("Done writing to file");
       })
       .catch((err) => {
+        logToDiscord(err, true);
         console.log("Error occurred: ", err);
       });
   } catch (err) {
+    logToDiscord(err, true);
     console.warn("err -----", err?.response?.status, err?.response?.statusText);
   }
 };

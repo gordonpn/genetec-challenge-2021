@@ -1,4 +1,5 @@
 import blobConnectionInstance from "./blobConnection.js";
+import { logToDiscord } from "./logger.js";
 
 async function imageUploader(licensePlate, imageString) {
   const containerClient = blobConnectionInstance.getContainerClient();
@@ -17,6 +18,7 @@ async function imageUploader(licensePlate, imageString) {
       uploadBlobResponse.requestId
     );
   } catch (err) {
+    logToDiscord(err, true);
     console.log(err);
   }
 

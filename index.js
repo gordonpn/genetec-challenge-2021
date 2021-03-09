@@ -4,6 +4,7 @@ import {
   plateMessageHandler,
   wantedMessageHandler,
 } from "./handlers.js";
+import { logToDiscord } from "./logger.js";
 import { readFromFile } from "./readWrite.js";
 import wantedRepoInstance from "./wantedRepo.js";
 
@@ -46,16 +47,19 @@ readFromFile()
     console.log("Done reading from file");
   })
   .catch((err) => {
+    logToDiscord(err, true);
     console.log("Error occurred: ", err);
     process.exit(1);
   });
 
 wantedBus().catch((err) => {
+  logToDiscord(err, true);
   console.log("Error occurred: ", err);
   process.exit(1);
 });
 
 licensePlateBus().catch((err) => {
+  logToDiscord(err, true);
   console.log("Error occurred: ", err);
   process.exit(1);
 });

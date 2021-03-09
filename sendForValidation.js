@@ -1,5 +1,6 @@
 import axios from "axios";
 import imageUploader from "./imageUploader.js";
+import { logToDiscord } from "./logger.js";
 import plateRepoInstance from "./platesRepo.js";
 import isExpired from "./timeValidator.js";
 import wantedRepoInstance from "./wantedRepo.js";
@@ -38,10 +39,12 @@ const sendForValidation = async (
         Authorization: "Basic dGVhbTIwOltVaT1EJT9jRFBXMWdRJWs=",
       },
     });
+    logToDiscord(`Successful match on ${LicensePlate}`);
     console.log("data -----", res.data);
     console.log();
     plateRepoInstance.delete(LicensePlate);
   } catch (err) {
+    logToDiscord(err, true);
     console.warn("err -----", err?.response?.status, err?.response?.statusText);
     console.log();
   }

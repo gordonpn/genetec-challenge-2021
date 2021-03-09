@@ -1,4 +1,5 @@
 import { readFile, writeFile } from "fs/promises";
+import { logToDiscord } from "./logger";
 
 const JSON_FILE = "./wantedPlates.json";
 
@@ -8,6 +9,7 @@ const writeToFile = async (wantedSet) => {
     await writeFile(JSON_FILE, "");
     await writeFile(JSON_FILE, JSON.stringify(Array.from(wantedSet.values())));
   } catch (err) {
+    logToDiscord(err, true);
     console.log("Error writing file", err);
   }
 };
@@ -18,6 +20,7 @@ const readFromFile = async () => {
     console.log("jsonString", jsonString);
     return JSON.parse(jsonString);
   } catch (err) {
+    logToDiscord(err, true);
     console.log("File read failed:", err);
     return;
   }

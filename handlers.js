@@ -1,10 +1,11 @@
 import getNewWantedPlates from "./getNewWantedPlates.js";
-import appendToLogs from "./logger.js";
+import { appendToLogs, logToDiscord } from "./logger.js";
 import plateRepoInstance from "./platesRepo.js";
 import sendForValidation from "./sendForValidation.js";
 import wantedRepoInstance from "./wantedRepo.js";
 
 const errorHandler = async (error) => {
+  logToDiscord(error, true);
   console.log(error);
 };
 
@@ -52,6 +53,7 @@ const wantedMessageHandler = async (messageReceived) => {
   const { TotalWantedCount } = messageReceived.body;
   console.log("TotalWantedCount", TotalWantedCount);
   console.log();
+  logToDiscord(`New plates on the bus, count: ${TotalWantedCount}`);
 
   if (wantedRepoInstance.size() < Number(TotalWantedCount)) {
     getNewWantedPlates();
