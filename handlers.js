@@ -1,4 +1,5 @@
 import getNewWantedPlates from "./getNewWantedPlates.js";
+import appendToLogs from "./logger.js";
 import plateRepoInstance from "./platesRepo.js";
 import sendForValidation from "./sendForValidation.js";
 import wantedRepoInstance from "./wantedRepo.js";
@@ -17,6 +18,8 @@ const plateMessageHandler = async (messageReceived) => {
     LicensePlateImageJpg,
   } = messageReceived.body;
 
+  appendToLogs(LicensePlate, LicensePlateCaptureTime);
+
   // console.log(Object.keys(messageReceived.body));
 
   plateRepoInstance.add(LicensePlate, {
@@ -28,7 +31,13 @@ const plateMessageHandler = async (messageReceived) => {
     LicensePlateImageJpg,
   });
 
-  sendForValidation(LicensePlateCaptureTime, LicensePlate, Latitude, Longitude);
+  sendForValidation(
+    LicensePlateCaptureTime,
+    LicensePlate,
+    Latitude,
+    Longitude,
+    ContextImageJpg
+  );
 
   // console.log("LicensePlateImageJpg", LicensePlateImageJpg);
   // console.log("ContextImageJpg", ContextImageJpg);

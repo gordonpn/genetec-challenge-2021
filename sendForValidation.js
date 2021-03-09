@@ -1,4 +1,5 @@
 import axios from "axios";
+import imageUploader from "./imageUploader.js";
 import plateRepoInstance from "./platesRepo.js";
 import isExpired from "./timeValidator.js";
 import wantedRepoInstance from "./wantedRepo.js";
@@ -7,7 +8,8 @@ const sendForValidation = async (
   LicensePlateCaptureTime,
   LicensePlate,
   Latitude,
-  Longitude
+  Longitude,
+  ContextImageJpg
 ) => {
   if (!wantedRepoInstance.has(LicensePlate)) {
     console.log("No match");
@@ -17,6 +19,8 @@ const sendForValidation = async (
   if (isExpired(LicensePlateCaptureTime)) {
     return;
   }
+
+  const contextImgRef = await imageUploader(LicensePlate, ContextImageJpg);
 
   try {
     const res = await axios({
@@ -28,6 +32,7 @@ const sendForValidation = async (
         LicensePlate,
         Latitude,
         Longitude,
+        ContextImageReference: contextImgRef,
       },
       headers: {
         Authorization: "Basic dGVhbTIwOltVaT1EJT9jRFBXMWdRJWs=",
