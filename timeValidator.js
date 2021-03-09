@@ -1,4 +1,4 @@
-export default function isExpired(rawTime) {
+function isExpired(rawTime) {
   const receivedTime = Date.parse(rawTime);
   const FIVE_HOURS = 18000000;
   const convertedTime = receivedTime - FIVE_HOURS;
@@ -10,3 +10,5 @@ export default function isExpired(rawTime) {
   }
   return true;
 }
+
+export default isExpired;
