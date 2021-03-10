@@ -6,8 +6,6 @@ import sendForValidation from "./sendForValidation.js";
 import wantedRepoInstance from "./wantedRepo.js";
 
 const getNewWantedPlates = async () => {
-  // -$30 every time this gets called
-
   // if (!shouldMakeGet()) {
   //   console.log("Skipped wanted plate request")
   //   logToDiscord("Skipped wanted plate request");

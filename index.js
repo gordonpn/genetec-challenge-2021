@@ -44,6 +44,8 @@ async function wantedBus() {
 readFromFile()
   .then((array) => {
     wantedRepoInstance.add(array);
+    logToDiscord(`Load ${wantedRepoInstance.size()} wanted plates`);
+    console.log(`Load ${wantedRepoInstance.size()} wanted plates`);
     console.log("Done reading from file");
   })
   .catch((err) => {
