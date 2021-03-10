@@ -29,6 +29,13 @@ const sendForValidation = async (
   const actualWantedPlate = wantedRepoInstance.getOne(LicensePlate);
   const contextImgRef = await imageUploader(LicensePlate, ContextImageJpg);
 
+  if (actualWantedPlate === LicensePlate) {
+    console.log(`This was a fuzzy match ${LicensePlate}: ${actualWantedPlate}`);
+    logToDiscord(
+      `This was a fuzzy match ${LicensePlate}: ${actualWantedPlate}`
+    );
+  }
+
   try {
     const res = await axios({
       method: "post",
