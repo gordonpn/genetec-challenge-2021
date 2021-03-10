@@ -1,4 +1,5 @@
 import axios from "axios";
+import { performance } from "perf_hooks";
 import makeFuzzy from "./fuzzyMaker.js";
 import { logToDiscord } from "./logger.js";
 import plateRepoInstance from "./platesRepo.js";
@@ -31,6 +32,8 @@ const getNewWantedPlates = async () => {
 
     wantedRepoInstance.clear();
 
+    const t0 = performance.now();
+
     data.forEach((wantedStr) => {
       const fuzzySet = makeFuzzy(wantedStr);
       fuzzySet.forEach((fuzzyPlate) => {
@@ -38,6 +41,9 @@ const getNewWantedPlates = async () => {
       });
       // wantedRepoInstance.add(Array.from(fuzzySet.values()));
     });
+
+    const t1 = performance.now();
+    console.log(`\nTotal fuzzy match took ${t1 - t0} ms\n`);
 
     wantedRepoInstance.get().forEach((fuzzyPlate, wantedPlate) => {
       const plate = plateRepoInstance.get(fuzzyPlate);

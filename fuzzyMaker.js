@@ -1,5 +1,3 @@
-import { performance } from "perf_hooks";
-
 const fuzzyChars = new Set([
   "B",
   "8",
@@ -44,7 +42,7 @@ const replaceChar = (origString, newChar, index) => {
 };
 
 const makeFuzzy = (plate) => {
-  const t0 = performance.now();
+  // const t0 = performance.now();
   const fuzzyMatches = new Set();
   fuzzyMatches.add(plate);
 
@@ -130,9 +128,9 @@ const makeFuzzy = (plate) => {
     });
   });
 
-  const t1 = performance.now();
-  console.log(`\nFuzzy match for ${plate} took ${t1 - t0} ms\n`);
-  console.log(`${fuzzyMatches} size: ${fuzzyMatches.size}`);
+  // const t1 = performance.now();
+  // console.log(`\nFuzzy match for ${plate} took ${t1 - t0} ms\n`);
+  // console.log(`${fuzzyMatches} size: ${fuzzyMatches.size}`);
   return fuzzyMatches;
 };
 
