@@ -22,11 +22,11 @@ class wantedRepo {
     this._data.delete(plate);
   }
 
-  setLastTime(lastTime) {
+  set lastTime(lastTime) {
     this._lastTime = lastTime;
   }
 
-  getLastTime() {
+  get lastTime() {
     return this._lastTime;
   }
 
