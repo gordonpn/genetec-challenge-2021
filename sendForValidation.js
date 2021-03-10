@@ -18,6 +18,7 @@ const sendForValidation = async (
   }
 
   if (isExpired(LicensePlateCaptureTime)) {
+    plateRepoInstance.delete(LicensePlate);
     console.log("Plate expired");
     logToDiscord(
       `Wanted to match ${LicensePlate} but it's expired\n${LicensePlateCaptureTime}`
@@ -25,6 +26,7 @@ const sendForValidation = async (
     return;
   }
 
+  const actualWantedPlate = wantedRepoInstance.getOne(LicensePlate);
   const contextImgRef = await imageUploader(LicensePlate, ContextImageJpg);
 
   try {
@@ -34,7 +36,7 @@ const sendForValidation = async (
         "https://licenseplatevalidator.azurewebsites.net/api/lpr/platelocation",
       data: {
         LicensePlateCaptureTime,
-        LicensePlate,
+        LicensePlate: actualWantedPlate,
         Latitude,
         Longitude,
         ContextImageReference: contextImgRef,

@@ -1,5 +1,5 @@
 import getNewWantedPlates from "./getNewWantedPlates.js";
-import { appendToLogs, logToDiscord } from "./logger.js";
+import { logToDiscord } from "./logger.js";
 import plateRepoInstance from "./platesRepo.js";
 import sendForValidation from "./sendForValidation.js";
 import wantedRepoInstance from "./wantedRepo.js";
@@ -19,7 +19,7 @@ const plateMessageHandler = async (messageReceived) => {
     LicensePlateImageJpg,
   } = messageReceived.body;
 
-  appendToLogs(LicensePlate, LicensePlateCaptureTime);
+  // appendToLogs(LicensePlate, LicensePlateCaptureTime);
 
   // console.log(Object.keys(messageReceived.body));
 

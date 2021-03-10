@@ -4,13 +4,13 @@ import makeFuzzy from "./fuzzyMaker.js";
 
 const JSON_FILE = "./wantedPlates.json";
 
-const writeToFile = async (wantedSet) => {
+const writeToFile = async (wantedMap) => {
   console.log("Deleting contents ", JSON_FILE);
   try {
     await writeFile(JSON_FILE, "");
     await writeFile(
       JSON_FILE,
-      JSON.stringify(Array.from(wantedSet.values()), null, 2)
+      JSON.stringify(Array.from(wantedMap.entries()), null, 2)
     );
   } catch (err) {
     console.log("Error writing file", err);
@@ -18,7 +18,7 @@ const writeToFile = async (wantedSet) => {
 };
 
 const generateFuzzy = async () => {
-  const tempSet = new Set();
+  const tempMap = new Map();
   const res = await axios({
     method: "get",
     url: "https://licenseplatevalidator.azurewebsites.net/api/lpr/wantedplates",
@@ -31,11 +31,11 @@ const generateFuzzy = async () => {
   data.forEach((wantedStr) => {
     const fuzzySet = makeFuzzy(wantedStr);
     fuzzySet.forEach((str) => {
-      tempSet.add(str);
+      tempMap.set(str, wantedStr);
     });
   });
 
-  writeToFile(tempSet);
+  writeToFile(tempMap);
 };
 
 generateFuzzy();

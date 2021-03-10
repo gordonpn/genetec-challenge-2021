@@ -33,11 +33,14 @@ const getNewWantedPlates = async () => {
 
     data.forEach((wantedStr) => {
       const fuzzySet = makeFuzzy(wantedStr);
-      wantedRepoInstance.add(Array.from(fuzzySet.values()));
+      fuzzySet.forEach((fuzzyPlate) => {
+        wantedRepoInstance.add(fuzzyPlate, wantedStr);
+      });
+      // wantedRepoInstance.add(Array.from(fuzzySet.values()));
     });
 
-    wantedRepoInstance.get().forEach((wantedPlate) => {
-      const plate = plateRepoInstance.get(wantedPlate);
+    wantedRepoInstance.get().forEach((fuzzyPlate, wantedPlate) => {
+      const plate = plateRepoInstance.get(fuzzyPlate);
 
       if (!plate) {
         return;
@@ -56,6 +59,8 @@ const getNewWantedPlates = async () => {
         plate.ContextImageJpg
       );
     });
+
+    logToDiscord(`New reverse index count: ${wantedRepoInstance.size()}`);
 
     writeToFile(wantedRepoInstance.get())
       .then(() => {
