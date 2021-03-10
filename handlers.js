@@ -56,20 +56,20 @@ const wantedMessageHandler = async (messageReceived) => {
   logToDiscord(`New plates on the bus, count: ${TotalWantedCount}`);
   logToDiscord(`Current wanted list size ${wantedRepoInstance.size()}`);
 
-  if (wantedRepoInstance.getLastTime() === undefined) {
-    await getNewWantedPlates();
-    wantedRepoInstance.setLastTime(new Date().getTime());
-    return;
-  }
+  // if (wantedRepoInstance.getLastTime() === undefined) {
+  //   await getNewWantedPlates();
+  //   wantedRepoInstance.setLastTime(new Date().getTime());
+  //   return;
+  // }
 
-  const ONE_HOUR = 3600000;
-  const timeNow = new Date().getTime();
-  const diffInMilliseconds = Math.abs(wantedRepoInstance.getLastTime() - timeNow);
+  // const ONE_HOUR = 7200000;
+  // const timeNow = new Date().getTime();
+  // const diffInMilliseconds = Math.abs(wantedRepoInstance.getLastTime() - timeNow);
   
-  if (diffInMilliseconds >= ONE_HOUR) {
-    await getNewWantedPlates();
-    wantedRepoInstance.setLastTime(new Date().getTime());
-  }
+  // if (diffInMilliseconds >= ONE_HOUR) {
+  //   await getNewWantedPlates();
+  //   wantedRepoInstance.setLastTime(new Date().getTime());
+  // }
 };
 
 export { errorHandler, plateMessageHandler, wantedMessageHandler };
