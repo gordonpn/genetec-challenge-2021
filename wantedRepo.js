@@ -37,6 +37,10 @@ class wantedRepo {
   size() {
     return this._data.size;
   }
+
+  clear() {
+    this._data.clear();
+  }
 }
 
 const wantedRepoInstance = new wantedRepo();

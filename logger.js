@@ -12,6 +12,12 @@ const appendToLogs = async (licensePlate, recordedTime) => {
   }
 };
 
+const sleeper = (ms) => {
+  return function (x) {
+    return new Promise((resolve) => setTimeout(() => resolve(x), ms));
+  };
+};
+
 const logToDiscord = async (message, isError = false) => {
   let discordUrl =
     "https://discord.com/api/webhooks/818944083425755148/-uXqQ2tNDG-rGaOEDpLXgkcys_flMwJ5bFJ8gr9nQDr4s-Lb_XnoLC3m3581sSMfWLhH";
@@ -21,18 +27,18 @@ const logToDiscord = async (message, isError = false) => {
       "https://discord.com/api/webhooks/818948024751095840/tGqzdT52AF2dAxWBv_PYPJdtvVyRnxEoONNPTKRzgsoK2ptppxt5-M49c2-akETqeG0Y";
   }
 
-  try {
-    await axios({
-      method: "post",
-      url: discordUrl,
-      data: { content: message },
-      headers: {
-        "Content-Type": "application/json",
-      },
+  axios({
+    method: "post",
+    url: discordUrl,
+    data: { content: message },
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then(sleeper(500))
+    .catch((err) => {
+      console.log(err);
     });
-  } catch (err) {
-    console.log(err);
-  }
 };
 
 export { appendToLogs, logToDiscord };

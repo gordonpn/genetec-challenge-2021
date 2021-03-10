@@ -1,4 +1,5 @@
 import { ServiceBusClient } from "@azure/service-bus";
+import getNewWantedPlates from "./getNewWantedPlates.js";
 import {
   errorHandler,
   plateMessageHandler,
@@ -41,18 +42,22 @@ async function wantedBus() {
   });
 }
 
-readFromFile()
-  .then((array) => {
-    wantedRepoInstance.add(array);
-    logToDiscord(`Load ${wantedRepoInstance.size()} wanted plates`);
-    console.log(`Load ${wantedRepoInstance.size()} wanted plates`);
-    console.log("Done reading from file");
-  })
-  .catch((err) => {
-    logToDiscord("Caught error in readFromFile", true);
-    console.log("Error occurred: ", err);
-    process.exit(1);
-  });
+if (process.env.START_FRESH) {
+  getNewWantedPlates();
+} else {
+  readFromFile()
+    .then((array) => {
+      wantedRepoInstance.add(array);
+      logToDiscord(`Load ${wantedRepoInstance.size()} wanted plates`);
+      console.log(`Load ${wantedRepoInstance.size()} wanted plates`);
+      console.log("Done reading from file");
+    })
+    .catch((err) => {
+      logToDiscord("Caught error in readFromFile", true);
+      console.log("Error occurred: ", err);
+      process.exit(1);
+    });
+}
 
 wantedBus().catch((err) => {
   logToDiscord("Caught error in wantedBus", true);

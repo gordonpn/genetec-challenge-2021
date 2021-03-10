@@ -47,7 +47,6 @@ const makeFuzzy = (plate) => {
   const t0 = performance.now();
   const fuzzyMatches = new Set();
   fuzzyMatches.add(plate);
-  // let index = 0;
 
   const makeFuzzyB = (aPlate, givenIndex) => {
     bGroup.forEach((char) => {
@@ -104,7 +103,7 @@ const makeFuzzy = (plate) => {
   };
 
   fuzzyMatches.forEach((thisPlate) => {
-    console.log(`Processing ${thisPlate}`);
+    // console.log(`Processing ${thisPlate}`);
     [...thisPlate].forEach((letter, index) => {
       if (fuzzyChars.has(letter)) {
         if (bGroup.has(letter)) {
@@ -128,22 +127,18 @@ const makeFuzzy = (plate) => {
         }
         // console.log(`index: ${index} has fuzzy char ${letter}`);
       }
-      // index++;
     });
   });
 
   const t1 = performance.now();
   console.log(`\nFuzzy match for ${plate} took ${t1 - t0} ms\n`);
   console.log(`${fuzzyMatches} size: ${fuzzyMatches.size}`);
-  return fuzzyMatches.values();
+  return fuzzyMatches;
 };
 
-const total0 = performance.now();
-console.log(makeFuzzy("003VLH"));
-console.log(makeFuzzy("025WFD"));
-console.log(makeFuzzy("027SSD"));
-console.log(makeFuzzy("047PGM"));
-console.log(makeFuzzy("065TZN"));
-console.log(makeFuzzy("337PXD"));
-const total1 = performance.now();
-console.log(`\nTotal fuzzy match took ${total1 - total0} ms\n`);
+// const total0 = performance.now();
+// console.log(makeFuzzy("027SSD").values());
+// const total1 = performance.now();
+// console.log(`\nTotal fuzzy match took ${total1 - total0} ms\n`);
+
+export default makeFuzzy;

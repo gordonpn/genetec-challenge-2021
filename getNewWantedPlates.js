@@ -1,4 +1,5 @@
 import axios from "axios";
+import makeFuzzy from "./fuzzyMaker.js";
 import { logToDiscord } from "./logger.js";
 import plateRepoInstance from "./platesRepo.js";
 import { writeToFile } from "./readWrite.js";
@@ -24,11 +25,15 @@ const getNewWantedPlates = async () => {
         // Authorization: "Basic dGVhbTIzOjN4KD1aQmdmK3k9bnZ1P2c= ",
       },
     });
-    console.log(res.data);
-    logToDiscord(`New plates acquired ${res.data}`);
+    const { data } = res;
+    console.log(data);
+    logToDiscord(`New plates acquired ${data}`);
 
-    res.data.forEach((wantedStr) => {
-      wantedRepoInstance.add(wantedStr);
+    wantedRepoInstance.clear();
+
+    data.forEach((wantedStr) => {
+      const fuzzySet = makeFuzzy(wantedStr);
+      wantedRepoInstance.add(Array.from(fuzzySet.values()));
     });
 
     wantedRepoInstance.get().forEach((wantedPlate) => {

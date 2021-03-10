@@ -56,9 +56,9 @@ const wantedMessageHandler = async (messageReceived) => {
   logToDiscord(`New plates on the bus, count: ${TotalWantedCount}`);
   logToDiscord(`Current wanted list size ${wantedRepoInstance.size()}`);
 
-  if (wantedRepoInstance.size() < Number(TotalWantedCount)) {
-    await getNewWantedPlates();
-  }
+  // if (wantedRepoInstance.size() < Number(TotalWantedCount)) {
+  await getNewWantedPlates();
+  // }
 
   // if (wantedRepoInstance.lastTime() === undefined) {
   //   await getNewWantedPlates();
