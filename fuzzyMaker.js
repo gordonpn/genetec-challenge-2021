@@ -134,6 +134,7 @@ const makeFuzzy = (plate) => {
 
   const t1 = performance.now();
   console.log(`\nFuzzy match for ${plate} took ${t1 - t0} ms\n`);
+  console.log(`${fuzzyMatches} size: ${fuzzyMatches.size}`);
   return fuzzyMatches.values();
 };
 
