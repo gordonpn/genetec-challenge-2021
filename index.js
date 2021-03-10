@@ -44,11 +44,12 @@ async function wantedBus() {
 readFromFile()
   .then((mapFromFile) => {
     mapFromFile.forEach((key, value) => {
-      wantedRepoInstance.add(key, value);
+      console.log(`value: ${value}, key: ${key}`);
+      wantedRepoInstance.add(value, key);
     });
     // wantedRepoInstance.add(mapFromFile);
-    logToDiscord(`Load ${wantedRepoInstance.size()} wanted plates`);
-    console.log(`Load ${wantedRepoInstance.size()} wanted plates`);
+    logToDiscord(`Loaded ${wantedRepoInstance.size()} wanted plates`);
+    console.log(`Loaded ${wantedRepoInstance.size()} wanted plates`);
     console.log("Done reading from file");
   })
   .catch((err) => {
