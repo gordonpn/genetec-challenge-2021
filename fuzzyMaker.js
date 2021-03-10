@@ -45,96 +45,104 @@ const replaceChar = (origString, newChar, index) => {
 
 const makeFuzzy = (plate) => {
   const t0 = performance.now();
-  const fuzzyMatches = [];
-  let index = 0;
+  const fuzzyMatches = new Set();
+  fuzzyMatches.add(plate);
+  // let index = 0;
 
-  const makeFuzzyB = (givenIndex) => {
+  const makeFuzzyB = (aPlate, givenIndex) => {
     bGroup.forEach((char) => {
-      fuzzyMatches.push(replaceChar(plate, char, givenIndex));
+      fuzzyMatches.add(replaceChar(aPlate, char, givenIndex));
     });
   };
 
-  const makeFuzzyC = (givenIndex) => {
+  const makeFuzzyC = (aPlate, givenIndex) => {
     cGroup.forEach((char) => {
-      fuzzyMatches.push(replaceChar(plate, char, givenIndex));
+      fuzzyMatches.add(replaceChar(aPlate, char, givenIndex));
     });
   };
 
-  const makeFuzzyE = (givenIndex) => {
+  const makeFuzzyE = (aPlate, givenIndex) => {
     eGroup.forEach((char) => {
-      fuzzyMatches.push(replaceChar(plate, char, givenIndex));
+      fuzzyMatches.add(replaceChar(aPlate, char, givenIndex));
     });
   };
 
-  const makeFuzzyK = (givenIndex) => {
+  const makeFuzzyK = (aPlate, givenIndex) => {
     kGroup.forEach((char) => {
-      fuzzyMatches.push(replaceChar(plate, char, givenIndex));
+      fuzzyMatches.add(replaceChar(aPlate, char, givenIndex));
     });
   };
 
-  const makeFuzzyI = (givenIndex) => {
+  const makeFuzzyI = (aPlate, givenIndex) => {
     iGroup.forEach((char) => {
-      fuzzyMatches.push(replaceChar(plate, char, givenIndex));
+      fuzzyMatches.add(replaceChar(aPlate, char, givenIndex));
     });
   };
 
-  const makeFuzzyS = (givenIndex) => {
+  const makeFuzzyS = (aPlate, givenIndex) => {
     sGroup.forEach((char) => {
-      fuzzyMatches.push(replaceChar(plate, char, givenIndex));
+      fuzzyMatches.add(replaceChar(aPlate, char, givenIndex));
     });
   };
 
-  const makeFuzzyO = (givenIndex) => {
+  const makeFuzzyO = (aPlate, givenIndex) => {
     oGroup.forEach((char) => {
-      fuzzyMatches.push(replaceChar(plate, char, givenIndex));
+      fuzzyMatches.add(replaceChar(aPlate, char, givenIndex));
     });
   };
 
-  const makeFuzzyP = (givenIndex) => {
+  const makeFuzzyP = (aPlate, givenIndex) => {
     pGroup.forEach((char) => {
-      fuzzyMatches.push(replaceChar(plate, char, givenIndex));
+      fuzzyMatches.add(replaceChar(aPlate, char, givenIndex));
     });
   };
 
-  const makeFuzzyZ = (givenIndex) => {
+  const makeFuzzyZ = (aPlate, givenIndex) => {
     zGroup.forEach((char) => {
-      fuzzyMatches.push(replaceChar(plate, char, givenIndex));
+      fuzzyMatches.add(replaceChar(aPlate, char, givenIndex));
     });
   };
 
-  [...plate].forEach((letter) => {
-    if (fuzzyChars.has(letter)) {
-      if (bGroup.has(letter)) {
-        makeFuzzyB(index);
-      } else if (cGroup.has(letter)) {
-        makeFuzzyC(index);
-      } else if (eGroup.has(letter)) {
-        makeFuzzyE(index);
-      } else if (kGroup.has(letter)) {
-        makeFuzzyK(index);
-      } else if (iGroup.has(letter)) {
-        makeFuzzyI(index);
-      } else if (sGroup.has(letter)) {
-        makeFuzzyS(index);
-      } else if (oGroup.has(letter)) {
-        makeFuzzyO(index);
-      } else if (pGroup.has(letter)) {
-        makeFuzzyP(index);
-      } else if (zGroup.has(letter)) {
-        makeFuzzyZ(index);
+  fuzzyMatches.forEach((thisPlate) => {
+    console.log(`Processing ${thisPlate}`);
+    [...thisPlate].forEach((letter, index) => {
+      if (fuzzyChars.has(letter)) {
+        if (bGroup.has(letter)) {
+          makeFuzzyB(thisPlate, index);
+        } else if (cGroup.has(letter)) {
+          makeFuzzyC(thisPlate, index);
+        } else if (eGroup.has(letter)) {
+          makeFuzzyE(thisPlate, index);
+        } else if (kGroup.has(letter)) {
+          makeFuzzyK(thisPlate, index);
+        } else if (iGroup.has(letter)) {
+          makeFuzzyI(thisPlate, index);
+        } else if (sGroup.has(letter)) {
+          makeFuzzyS(thisPlate, index);
+        } else if (oGroup.has(letter)) {
+          makeFuzzyO(thisPlate, index);
+        } else if (pGroup.has(letter)) {
+          makeFuzzyP(thisPlate, index);
+        } else if (zGroup.has(letter)) {
+          makeFuzzyZ(thisPlate, index);
+        }
+        // console.log(`index: ${index} has fuzzy char ${letter}`);
       }
-      console.log(`index: ${index} has fuzzy char ${letter}`);
-    }
-    index++;
+      // index++;
+    });
   });
 
   const t1 = performance.now();
   console.log(`\nFuzzy match for ${plate} took ${t1 - t0} ms\n`);
-  return fuzzyMatches;
+  return fuzzyMatches.values();
 };
 
+const total0 = performance.now();
 console.log(makeFuzzy("003VLH"));
 console.log(makeFuzzy("025WFD"));
 console.log(makeFuzzy("027SSD"));
 console.log(makeFuzzy("047PGM"));
 console.log(makeFuzzy("065TZN"));
+console.log(makeFuzzy("337PXD"));
+const total1 = performance.now();
+console.log(`\nTotal fuzzy match took ${total1 - total0} ms\n`);
