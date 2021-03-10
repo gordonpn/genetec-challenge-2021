@@ -29,13 +29,6 @@ const sendForValidation = async (
   const actualWantedPlate = wantedRepoInstance.getOne(LicensePlate);
   const contextImgRef = await imageUploader(LicensePlate, ContextImageJpg);
 
-  if (actualWantedPlate === LicensePlate) {
-    console.log(`This was a fuzzy match ${LicensePlate}: ${actualWantedPlate}`);
-    logToDiscord(
-      `This was a fuzzy match ${LicensePlate}: ${actualWantedPlate}`
-    );
-  }
-
   try {
     const res = await axios({
       method: "post",
@@ -52,7 +45,23 @@ const sendForValidation = async (
         Authorization: "Basic dGVhbTIwOltVaT1EJT9jRFBXMWdRJWs=",
       },
     });
-    logToDiscord(`Successful match on ${LicensePlate}`);
+
+    if (actualWantedPlate !== LicensePlate) {
+      console.log(
+        `This was a fuzzy match ${LicensePlate}: ${actualWantedPlate}`
+      );
+      logToDiscord(
+        `This was a fuzzy match ${LicensePlate}: ${actualWantedPlate}`
+      );
+    } else {
+      console.log(
+        `This was a exact match ${LicensePlate}: ${actualWantedPlate}`
+      );
+      logToDiscord(
+        `This was a exact match ${LicensePlate}: ${actualWantedPlate}`
+      );
+    }
+    // logToDiscord(`Successful match on ${LicensePlate}`);
     console.log("data -----", res.data);
     console.log();
     plateRepoInstance.delete(LicensePlate);
