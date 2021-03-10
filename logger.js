@@ -18,7 +18,7 @@ const sleeper = (ms) => {
   };
 };
 
-const logToDiscord = async (message, isError = false) => {
+const logToDiscord = (message, isError = false) => {
   let discordUrl =
     "https://discord.com/api/webhooks/818944083425755148/-uXqQ2tNDG-rGaOEDpLXgkcys_flMwJ5bFJ8gr9nQDr4s-Lb_XnoLC3m3581sSMfWLhH";
 
@@ -35,7 +35,7 @@ const logToDiscord = async (message, isError = false) => {
       "Content-Type": "application/json",
     },
   })
-    .then(sleeper(500))
+    .then(sleeper(250))
     .catch((err) => {
       console.log(err);
     });

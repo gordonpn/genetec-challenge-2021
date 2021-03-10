@@ -10,7 +10,6 @@ start:
 	--init \
 	-v $(DIR)/wantedPlates.json:/app/wantedPlates.json \
 	-v $(DIR)/seenPlates.csv:/app/seenPlates.csv \
-	-e IN_DOCKER='true' \
 	genetec-challenge-2021
 
 fresh:
@@ -21,6 +20,4 @@ fresh:
 	--init \
 	-v $(DIR)/wantedPlates.json:/app/wantedPlates.json \
 	-v $(DIR)/seenPlates.csv:/app/seenPlates.csv \
-	-e IN_DOCKER='true' \
-	-e START_FRESH='true' \
 	genetec-challenge-2021

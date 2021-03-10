@@ -17,10 +17,11 @@ const sendForValidation = async (
     return;
   }
 
-  // If IN_DOCKER is undefined, the if clause is short-circuited
-  if (process.env.IN_DOCKER && isExpired(LicensePlateCaptureTime)) {
+  if (isExpired(LicensePlateCaptureTime)) {
     console.log("Plate expired");
-    logToDiscord(`Wanted to match ${LicensePlate} but it's expired`);
+    logToDiscord(
+      `Wanted to match ${LicensePlate} but it's expired\n${LicensePlateCaptureTime}`
+    );
     return;
   }
 
