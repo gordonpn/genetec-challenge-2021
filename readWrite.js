@@ -7,7 +7,10 @@ const writeToFile = async (wantedSet) => {
   console.log("Deleting contents ", JSON_FILE);
   try {
     await writeFile(JSON_FILE, "");
-    await writeFile(JSON_FILE, JSON.stringify(Array.from(wantedSet.values())));
+    await writeFile(
+      JSON_FILE,
+      JSON.stringify(Array.from(wantedSet.values()), null, 2)
+    );
   } catch (err) {
     logToDiscord("Caught error in writeToFile", true);
     console.log("Error writing file", err);
