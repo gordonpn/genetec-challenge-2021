@@ -17,7 +17,7 @@ const getToken = () => {
   const currentHour = new Date().getHours();
 
   if (3 + UTC_DIFF <= currentHour && currentHour <= 6 + UTC_DIFF) {
-    if (probability(0.9)) {
+    if (probability(0.01)) {
       return "Basic dGVhbTIwOltVaT1EJT9jRFBXMWdRJWs=";
     }
     return tokens[Math.floor(Math.random() * tokens.length)];
