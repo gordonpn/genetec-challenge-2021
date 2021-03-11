@@ -47,28 +47,18 @@ const sendForValidation = async (
     });
 
     if (actualWantedPlate !== LicensePlate) {
-      console.log(
-        `This was a fuzzy match ${LicensePlate}: ${actualWantedPlate}`
-      );
-      logToDiscord(
-        `This was a fuzzy match ${LicensePlate}: ${actualWantedPlate}`
-      );
+      console.log(`Fuzzy match ${LicensePlate}: ${actualWantedPlate}`);
+      logToDiscord(`Fuzzy match ${LicensePlate}: ${actualWantedPlate}`);
     } else {
-      console.log(
-        `This was a exact match ${LicensePlate}: ${actualWantedPlate}`
-      );
-      logToDiscord(
-        `This was a exact match ${LicensePlate}: ${actualWantedPlate}`
-      );
+      console.log(`Exact match ${LicensePlate}: ${actualWantedPlate}`);
+      logToDiscord(`Exact match ${LicensePlate}: ${actualWantedPlate}`);
     }
     // logToDiscord(`Successful match on ${LicensePlate}`);
-    console.log("data -----", res.data);
-    console.log();
+    console.log(`data ----- ${res.data}\n`, res.data);
     plateRepoInstance.delete(LicensePlate);
   } catch (err) {
     logToDiscord("Caught error in sendForValidation", true);
-    console.warn("err -----", err);
-    console.log();
+    console.warn(`err ----- ${err?.response}\n`);
   }
 };
 

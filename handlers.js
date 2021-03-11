@@ -45,16 +45,14 @@ const plateMessageHandler = async (messageReceived) => {
   // console.log("Longitude", Longitude);
   // console.log("Latitude", Latitude);
   console.log("LicensePlate", LicensePlate);
-  console.log("LicensePlateCaptureTime", LicensePlateCaptureTime);
-  console.log();
+  console.log(`LicensePlateCaptureTime ${LicensePlateCaptureTime}\n`);
 };
 
 const wantedMessageHandler = async (messageReceived) => {
   const { TotalWantedCount } = messageReceived.body;
-  console.log("TotalWantedCount", TotalWantedCount);
-  console.log();
+  console.log(`TotalWantedCount ${TotalWantedCount}\n`);
   logToDiscord(
-    `New plates on the bus, count: ${TotalWantedCount}\nCurrent wanted list size ${wantedRepoInstance.size()}`
+    `New plates on the bus, count: ${TotalWantedCount}\nCurrent reverse index size ${wantedRepoInstance.size()}`
   );
 
   // if (wantedRepoInstance.size() < Number(TotalWantedCount)) {

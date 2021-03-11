@@ -28,7 +28,7 @@ const getNewWantedPlates = async () => {
     });
     const { data } = res;
     console.log(data);
-    logToDiscord(`New plates acquired ${data}`);
+    logToDiscord(`New plates acquired`);
 
     wantedRepoInstance.clear();
 
@@ -45,6 +45,7 @@ const getNewWantedPlates = async () => {
     const t1 = performance.now();
     console.log(`\nTotal fuzzy match took ${t1 - t0} ms\n`);
 
+    const tt0 = performance.now();
     wantedRepoInstance.get().forEach((fuzzyPlate, wantedPlate) => {
       const plate = plateRepoInstance.get(fuzzyPlate);
 
@@ -65,6 +66,8 @@ const getNewWantedPlates = async () => {
         plate.ContextImageJpg
       );
     });
+    const tt1 = performance.now();
+    console.log(`\nSearching for old plates took: ${tt1 - tt0} ms\n`);
 
     logToDiscord(`New reverse index count: ${wantedRepoInstance.size()}`);
 
@@ -78,7 +81,7 @@ const getNewWantedPlates = async () => {
       });
   } catch (err) {
     logToDiscord("Caught error in getNewWantedPlates", true);
-    console.warn("err -----", err);
+    console.warn("err -----", err?.response);
   }
 };
 

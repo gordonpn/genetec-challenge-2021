@@ -7,7 +7,7 @@ async function imageUploader(licensePlate, imageString) {
   // Get a block blob client
   const blockBlobClient = containerClient.getBlockBlobClient(licensePlate);
 
-  console.log("\nUploading to Azure storage as blob:\n\t", licensePlate);
+  console.log(`\nUploading to Azure storage as blob: ${licensePlate}`);
 
   try {
     // Upload data to the blob
