@@ -73,8 +73,13 @@ const postImage = async (url) => {
   try {
     let requestSuccess = false;
     let res;
+    let retries = 0;
 
     while (!requestSuccess) {
+      retries++;
+      if (retries > 3) {
+        return;
+      }
       res = await axios.post(
         postUrl,
         { url },
