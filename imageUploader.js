@@ -4,13 +4,11 @@ import { logToDiscord } from "./logger.js";
 async function imageUploader(licensePlate, imageString) {
   const containerClient = blobConnectionInstance.getContainerClient();
 
-  // Get a block blob client
   const blockBlobClient = containerClient.getBlockBlobClient(licensePlate);
 
   console.log(`\nUploading to Azure storage as blob: ${licensePlate}`);
 
   try {
-    // Upload data to the blob
     const imageBuffer = Buffer.from(imageString, "base64");
     const uploadBlobResponse = await blockBlobClient.uploadData(imageBuffer);
     console.log(

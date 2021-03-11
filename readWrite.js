@@ -20,7 +20,6 @@ const writeToFile = async (wantedMap) => {
 const readFromFile = async () => {
   try {
     const jsonString = await readFile(JSON_FILE, "utf8");
-    // console.log("jsonString", jsonString);
     return new Map(JSON.parse(jsonString));
   } catch (err) {
     logToDiscord("Caught error in readFromFile", true);

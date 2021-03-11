@@ -53,7 +53,6 @@ const sendForValidation = async (
       console.log(`Exact match ${LicensePlate}: ${actualWantedPlate}`);
       logToDiscord(`Exact match ${LicensePlate}: ${actualWantedPlate}`);
     }
-    // logToDiscord(`Successful match on ${LicensePlate}`);
     console.log(`data ----- ${res.data}\n`, res.data);
     plateRepoInstance.delete(LicensePlate);
   } catch (err) {

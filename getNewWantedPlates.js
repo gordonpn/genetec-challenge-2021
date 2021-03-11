@@ -1,6 +1,7 @@
 import axios from "axios";
 import { performance } from "perf_hooks";
 import makeFuzzy from "./fuzzyMaker.js";
+import getToken from "./getToken.js";
 import { logToDiscord } from "./logger.js";
 import plateRepoInstance from "./platesRepo.js";
 import { writeToFile } from "./readWrite.js";
@@ -20,10 +21,7 @@ const getNewWantedPlates = async () => {
       url:
         "https://licenseplatevalidator.azurewebsites.net/api/lpr/wantedplates",
       headers: {
-        Authorization: "Basic dGVhbTIwOltVaT1EJT9jRFBXMWdRJWs=",
-        // Authorization: "Basic dGVhbTAyOi1BTU1wc25oW251T3IxcFM=",
-        // Authorization: "Basic dGVhbTA4OjFBSz0kcUc/RDRlUzFGP0o=",
-        // Authorization: "Basic dGVhbTIzOjN4KD1aQmdmK3k9bnZ1P2c= ",
+        Authorization: getToken(),
       },
     });
     const { data } = res;
@@ -39,7 +37,6 @@ const getNewWantedPlates = async () => {
       fuzzySet.forEach((fuzzyPlate) => {
         wantedRepoInstance.add(fuzzyPlate, wantedStr);
       });
-      // wantedRepoInstance.add(Array.from(fuzzySet.values()));
     });
 
     const t1 = performance.now();
