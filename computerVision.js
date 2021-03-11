@@ -1,4 +1,5 @@
 import axios from "axios";
+import sharp from "sharp";
 import imageUploader from "./imageUploader.js";
 import { logToDiscord, sleeper } from "./logger.js";
 import wantedRepoInstance from "./wantedRepo.js";
@@ -51,7 +52,10 @@ const getImageToText = async (url) => {
     return wantedPlates;
   } catch (err) {
     console.log(err?.response?.data);
-    logToDiscord(`postImage Error: ${err?.response?.data}`, true);
+    logToDiscord(
+      `getImageToText Error: ${JSON.stringify(err?.response?.data, null, 2)}`,
+      true
+    );
   }
 };
 
@@ -101,7 +105,10 @@ const postImage = async (url) => {
     }
     return await getImageToText(res.headers["operation-location"]);
   } catch (err) {
-    logToDiscord(`postImage Error: ${err?.response?.data}`, true);
+    logToDiscord(
+      `postImage Error: ${JSON.stringify(err?.response?.data, null, 2)}`,
+      true
+    );
     console.log(err?.response?.data);
     return [];
   }
@@ -115,9 +122,19 @@ const ocrHandler = async (
   ContextImageJpg,
   LicensePlateImageJpg
 ) => {
+  let resizedLicenseImage;
+
+  try {
+    resizedLicenseImage = await sharp(LicensePlateImageJpg)
+      .resize({ width: 2000 })
+      .toBuffer();
+  } catch (err) {
+    console.log(err);
+  }
+
   const licensePlateImageRef = await imageUploader(
     LicensePlate,
-    LicensePlateImageJpg
+    resizedLicenseImage ? resizedLicenseImage : LicensePlateImageJpg
   );
 
   const arrayWantedOcr = await postImage(licensePlateImageRef);
