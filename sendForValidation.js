@@ -29,22 +29,28 @@ const sendForValidation = async (
   const actualWantedPlate = wantedRepoInstance.getOne(LicensePlate);
   const contextImgRef = await imageUploader(LicensePlate, ContextImageJpg);
 
+  const payload = {
+    LicensePlateCaptureTime,
+    LicensePlate: actualWantedPlate,
+    Latitude,
+    Longitude,
+    ContextImageReference: contextImgRef,
+  };
+
   try {
     const res = await axios({
       method: "post",
       url:
         "https://licenseplatevalidator.azurewebsites.net/api/lpr/platelocation",
-      data: {
-        LicensePlateCaptureTime,
-        LicensePlate: actualWantedPlate,
-        Latitude,
-        Longitude,
-        ContextImageReference: contextImgRef,
-      },
+      data: payload,
       headers: {
         Authorization: "Basic dGVhbTIwOltVaT1EJT9jRFBXMWdRJWs=",
       },
     });
+
+    console.log(
+      `Payload sent for validation:\n${JSON.stringify(payload, null, 2)}`
+    );
 
     if (actualWantedPlate !== LicensePlate) {
       console.log(`Fuzzy match ${LicensePlate}: ${actualWantedPlate}`);
@@ -53,7 +59,7 @@ const sendForValidation = async (
       console.log(`Exact match ${LicensePlate}: ${actualWantedPlate}`);
       logToDiscord(`Exact match ${LicensePlate}: ${actualWantedPlate}`);
     }
-    console.log(`data ----- ${res.data}\n`, res.data);
+    console.log(`data ----- ${res.data}\n`);
     plateRepoInstance.delete(LicensePlate);
   } catch (err) {
     logToDiscord("Caught error in sendForValidation", true);
