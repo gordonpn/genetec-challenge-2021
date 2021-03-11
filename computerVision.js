@@ -122,19 +122,20 @@ const ocrHandler = async (
   ContextImageJpg,
   LicensePlateImageJpg
 ) => {
-  let resizedLicenseImage;
+  let resizedBuffer;
 
   try {
-    resizedLicenseImage = await sharp(LicensePlateImageJpg)
+    resizedBuffer = await sharp(Buffer.from(LicensePlateImageJpg, "base64"))
       .resize({ width: 2000 })
+      .jpeg()
       .toBuffer();
   } catch (err) {
-    console.log(err);
+    console.log("sharp error:", err);
   }
 
   const licensePlateImageRef = await imageUploader(
     LicensePlate,
-    resizedLicenseImage ? resizedLicenseImage : LicensePlateImageJpg
+    resizedBuffer ? resizedBuffer.toString("base64") : LicensePlateImageJpg
   );
 
   const arrayWantedOcr = await postImage(licensePlateImageRef);
