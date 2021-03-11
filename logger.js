@@ -12,7 +12,7 @@ const appendToLogs = async (licensePlate, recordedTime) => {
   }
 };
 
-const sleeper = (ms) => {
+export const sleeper = (ms) => {
   return function (x) {
     return new Promise((resolve) => setTimeout(() => resolve(x), ms));
   };
