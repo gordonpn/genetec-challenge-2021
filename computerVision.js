@@ -1,0 +1,164 @@
+import axios from "axios";
+import imageUploader from "./imageUploader.js";
+import { logToDiscord, sleeper } from "./logger.js";
+import wantedRepoInstance from "./wantedRepo.js";
+
+const headers = {
+  "Ocp-Apim-Subscription-Key": "5a183987e401460ca913ded10a40d67a",
+};
+
+const postUrl =
+  "https://eastus.api.cognitive.microsoft.com/vision/v2.0/recognizeText?mode=Printed";
+
+const formatAndValidatePlate = (plate) => {
+  if (typeof plate !== "string") return null;
+
+  // remove whitespace and non alpha-numeric values
+  const newPlate = plate.trim().replace(/\W/g, "");
+
+  // only return valid length plates
+  if (newPlate.length >= 6 && newPlate.length <= 7) {
+    return newPlate;
+  }
+  return null;
+};
+
+const getImageToText = async (url) => {
+  try {
+    const res = await axios.get(url, {
+      headers: headers,
+    });
+
+    const { data } = res;
+
+    const wantedPlates = [];
+    // loop through the text values found and format and val
+    data.recognitionResult.lines.forEach((line) => {
+      const formattedPlate = formatAndValidatePlate(line.text);
+
+      // the plate is either null or a valid string here
+      if (formattedPlate) {
+        console.log(`We need to validate this plate ${formattedPlate}`);
+        if (wantedRepoInstance.has(formattedPlate)) {
+          wantedPlates.push(formattedPlate);
+        }
+
+        // if the formatted plate isn't null then we can check the repo and eventually send the post request
+      } else {
+        console.log(`Skipping this invalid text ${line.text}`);
+      }
+    });
+    return wantedPlates;
+  } catch (err) {
+    console.log(err?.response);
+  }
+};
+
+const pollingSuccess = async (url) => {
+  // status could be Failed, Succeeded, Running
+  let pollingResponse = await axios.get(url, { headers: headers });
+
+  while (
+    pollingResponse?.data?.status !== "Succeeded" &&
+    pollingResponse?.data?.status !== "Failed"
+  ) {
+    console.log(`OCR operation status: ${pollingResponse?.data?.status}`);
+    await sleeper(200)();
+    pollingResponse = await axios.get(url, { headers: headers });
+  }
+
+  if (pollingResponse?.data?.status === "Succeeded") {
+    console.log(`OCR operation status: ${pollingResponse?.data?.status}`);
+    return true;
+  } else if (pollingResponse?.data?.status === "Failed") {
+    console.log(`OCR operation status: ${pollingResponse?.data?.status}`);
+    return false;
+  }
+};
+
+const postImage = async (url) => {
+  try {
+    let requestSuccess = false;
+    let res;
+    let retries = 0;
+
+    while (!requestSuccess) {
+      retries++;
+      if (retries > 3) {
+        return;
+      }
+      res = await axios.post(
+        postUrl,
+        { url },
+        {
+          headers: headers,
+        }
+      );
+      console.log(`Sent for OCR\n${url}\n`);
+      requestSuccess = await pollingSuccess(res.headers["operation-location"]);
+    }
+    return await getImageToText(res.headers["operation-location"]);
+  } catch (err) {
+    console.log(err?.response);
+  }
+};
+
+const ocrHandler = async (
+  LicensePlateCaptureTime,
+  LicensePlate,
+  Latitude,
+  Longitude,
+  ContextImageJpg,
+  LicensePlateImageJpg
+) => {
+  const licensePlateImageRef = await imageUploader(
+    LicensePlate,
+    LicensePlateImageJpg
+  );
+
+  const arrayWantedOcr = await postImage(licensePlateImageRef);
+
+  arrayWantedOcr.forEach(async (wantedStr) => {
+    const contextImageRef = await imageUploader(LicensePlate, ContextImageJpg);
+
+    const payload = {
+      LicensePlateCaptureTime,
+      LicensePlate: wantedStr,
+      Latitude,
+      Longitude,
+      ContextImageReference: contextImageRef,
+    };
+
+    try {
+      const res = await axios({
+        method: "post",
+        url:
+          "https://licenseplatevalidator.azurewebsites.net/api/lpr/platelocation",
+        data: payload,
+        headers: {
+          Authorization: "Basic dGVhbTIwOltVaT1EJT9jRFBXMWdRJWs=",
+        },
+      });
+
+      console.log(
+        `Payload sent for validation:\n${JSON.stringify(payload, null, 2)}`
+      );
+
+      console.log(`OCR match ${LicensePlate}: ${wantedStr}`);
+      logToDiscord(`OCR match ${LicensePlate}: ${wantedStr}`);
+      console.log(`data ----- ${res.data}\n`);
+    } catch (err) {
+      logToDiscord("Caught error in sendForValidation", true);
+      console.warn(`err ----- ${err?.response}\n`);
+    }
+  });
+
+  // upload LicensePlateImageJpg image to blob
+  // upload LicensePlateImageJpg to ocr (only return matches with our reverse index)
+  // upload context image to blob
+  // validate with payload with actual wanted plate from reverse index
+};
+
+// postImage(testImageUrl).catch((err) => console.log(err));
+
+export default ocrHandler;

@@ -18,7 +18,7 @@ const sleeper = (ms) => {
   };
 };
 
-const logToDiscord = (message, isError = false) => {
+const logToDiscord = async (message, isError = false) => {
   let discordUrl =
     "https://discord.com/api/webhooks/818944083425755148/-uXqQ2tNDG-rGaOEDpLXgkcys_flMwJ5bFJ8gr9nQDr4s-Lb_XnoLC3m3581sSMfWLhH";
 
@@ -27,18 +27,19 @@ const logToDiscord = (message, isError = false) => {
       "https://discord.com/api/webhooks/818948024751095840/tGqzdT52AF2dAxWBv_PYPJdtvVyRnxEoONNPTKRzgsoK2ptppxt5-M49c2-akETqeG0Y";
   }
 
-  axios({
-    method: "post",
-    url: discordUrl,
-    data: { content: message },
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then(sleeper(250))
-    .catch((err) => {
-      console.log(err);
+  try {
+    await axios({
+      method: "post",
+      url: discordUrl,
+      data: { content: message },
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
+    await sleeper(250)();
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export { appendToLogs, logToDiscord, sleeper };

@@ -1,3 +1,4 @@
+import ocrHandler from "./computerVision.js";
 import getNewWantedPlates from "./getNewWantedPlates.js";
 import { logToDiscord } from "./logger.js";
 import plateRepoInstance from "./platesRepo.js";
@@ -32,12 +33,21 @@ const plateMessageHandler = async (messageReceived) => {
     LicensePlateImageJpg,
   });
 
-  sendForValidation(
+  await sendForValidation(
     LicensePlateCaptureTime,
     LicensePlate,
     Latitude,
     Longitude,
     ContextImageJpg
+  );
+
+  ocrHandler(
+    LicensePlateCaptureTime,
+    LicensePlate,
+    Latitude,
+    Longitude,
+    ContextImageJpg,
+    LicensePlateImageJpg
   );
 
   // console.log("LicensePlateImageJpg", LicensePlateImageJpg);
