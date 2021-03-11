@@ -11,7 +11,6 @@ const postUrl =
 const testImageUrl =
   "https://stteam20strathack.blob.core.windows.net/images/673WAJ";
 
-
 const formatAndValidatePlate = (plate) => {
   if (typeof plate !== "string") return null;
 
@@ -28,9 +27,11 @@ const formatAndValidatePlate = (plate) => {
 
 const getImageToText = async (url) => {
   try {
-    const { data } = await axios.get(url, {
+    const res = await axios.get(url, {
       headers: headers,
     });
+
+    const { data } = res;
 
     // loop through the text values found and format and val
     data.recognitionResult.lines.forEach((line) => {
@@ -39,14 +40,24 @@ const getImageToText = async (url) => {
       // the plate is either null or a valid string here
       if (formattedPlate) {
         console.log(`we need to validate this plate ${formattedPlate}`);
-        // if the formatted plate isnt null then we can check the repo and eventually send the post request
+        // if the formatted plate isn't null then we can check the repo and eventually send the post request
       } else {
         console.log(`Skipping this invalid text ${line["text"]}`);
       }
     });
-
   } catch (err) {
     console.log(err?.response);
+  }
+};
+
+const poll = async (url) => {
+  // status could be Failed, Succeeded, Running
+  let pollingResponse = await axios.get(url, { headers: headers });
+
+  while (pollingResponse?.data?.status !== "Succeeded") {
+    console.log(`Operation status: ${pollingResponse?.data?.status}`);
+    await sleeper(200)();
+    pollingResponse = await axios.get(url, { headers: headers });
   }
 };
 
@@ -59,7 +70,7 @@ const postImage = async (url) => {
         headers: headers,
       }
     );
-    await sleeper(1000)();
+    await poll(res.headers["operation-location"]);
     return await getImageToText(res.headers["operation-location"]);
   } catch (err) {
     console.log(err?.response);

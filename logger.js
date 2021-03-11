@@ -12,7 +12,7 @@ const appendToLogs = async (licensePlate, recordedTime) => {
   }
 };
 
-export const sleeper = (ms) => {
+const sleeper = (ms) => {
   return function (x) {
     return new Promise((resolve) => setTimeout(() => resolve(x), ms));
   };
@@ -41,4 +41,4 @@ const logToDiscord = (message, isError = false) => {
     });
 };
 
-export { appendToLogs, logToDiscord };
+export { appendToLogs, logToDiscord, sleeper };
