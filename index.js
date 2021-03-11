@@ -44,7 +44,7 @@ async function wantedBus() {
 readFromFile()
   .then((mapFromFile) => {
     mapFromFile.forEach((key, value) => {
-      console.log(`value: ${value}, key: ${key}`);
+      // console.log(`value: ${value}, key: ${key}`);
       wantedRepoInstance.add(value, key);
     });
     logToDiscord(`Loaded ${wantedRepoInstance.size()} wanted plates`);

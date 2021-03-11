@@ -50,12 +50,14 @@ const getImageToText = async (url) => {
     });
     return wantedPlates;
   } catch (err) {
-    console.log(err?.response);
+    console.log(err?.response?.data);
+    logToDiscord(`postImage Error: ${err?.response?.data}`, true);
   }
 };
 
 const pollingSuccess = async (url) => {
   // status could be Failed, Succeeded, Running
+  await sleeper(500)();
   let pollingResponse = await axios.get(url, { headers: headers });
 
   while (
@@ -63,7 +65,7 @@ const pollingSuccess = async (url) => {
     pollingResponse?.data?.status !== "Failed"
   ) {
     console.log(`OCR operation status: ${pollingResponse?.data?.status}`);
-    await sleeper(200)();
+    await sleeper(500)();
     pollingResponse = await axios.get(url, { headers: headers });
   }
 
@@ -99,7 +101,9 @@ const postImage = async (url) => {
     }
     return await getImageToText(res.headers["operation-location"]);
   } catch (err) {
-    console.log(err?.response);
+    logToDiscord(`postImage Error: ${err?.response?.data}`, true);
+    console.log(err?.response?.data);
+    return [];
   }
 };
 
@@ -148,7 +152,7 @@ const ocrHandler = async (
       logToDiscord(`OCR match ${LicensePlate}: ${wantedStr}`);
       console.log(`data ----- ${res.data}\n`);
     } catch (err) {
-      logToDiscord("Caught error in sendForValidation", true);
+      logToDiscord("Caught error in arrayWantedOcr.forEach", true);
       console.warn(`err ----- ${err?.response}\n`);
     }
   });
