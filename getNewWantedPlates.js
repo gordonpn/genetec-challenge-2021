@@ -78,7 +78,7 @@ const getNewWantedPlates = async () => {
       });
   } catch (err) {
     logToDiscord("Caught error in getNewWantedPlates", true);
-    console.warn("err -----", err?.response);
+    console.warn("error -----", err?.response);
   }
 };
 

@@ -61,7 +61,7 @@ const getImageToText = async (url) => {
 
 const pollingSuccess = async (url) => {
   // status could be Failed, Succeeded, Running
-  await sleeper(500)();
+  await sleeper(800)();
   let pollingResponse = await axios.get(url, { headers: headers });
 
   while (
@@ -69,7 +69,7 @@ const pollingSuccess = async (url) => {
     pollingResponse?.data?.status !== "Failed"
   ) {
     console.log(`OCR operation status: ${pollingResponse?.data?.status}`);
-    await sleeper(500)();
+    await sleeper(800)();
     pollingResponse = await axios.get(url, { headers: headers });
   }
 
@@ -126,7 +126,7 @@ const ocrHandler = async (
 
   try {
     resizedBuffer = await sharp(Buffer.from(LicensePlateImageJpg, "base64"))
-      .resize({ width: 2000 })
+      .resize({ width: 1000 })
       .jpeg()
       .toBuffer();
   } catch (err) {
@@ -171,7 +171,7 @@ const ocrHandler = async (
       console.log(`data ----- ${res.data}\n`);
     } catch (err) {
       logToDiscord("Caught error in arrayWantedOcr.forEach", true);
-      console.warn(`err ----- ${err?.response}\n`);
+      console.warn(`error ----- ${err?.response}\n`);
     }
   });
 
