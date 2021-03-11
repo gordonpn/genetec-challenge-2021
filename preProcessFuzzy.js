@@ -5,13 +5,14 @@ import makeFuzzy from "./fuzzyMaker.js";
 const JSON_FILE = "./wantedPlates.json";
 
 const writeToFile = async (wantedMap) => {
-  console.log("Deleting contents ", JSON_FILE);
+  console.log("Deleting contents", JSON_FILE);
   try {
     await writeFile(JSON_FILE, "");
     await writeFile(
       JSON_FILE,
       JSON.stringify(Array.from(wantedMap.entries()), null, 2)
     );
+    console.log("Done writing", JSON_FILE);
   } catch (err) {
     console.log("Error writing file", err);
   }

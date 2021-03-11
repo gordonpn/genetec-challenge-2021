@@ -1,4 +1,5 @@
 import axios from "axios";
+import sharp from "sharp";
 import imageUploader from "./imageUploader.js";
 import { logToDiscord, sleeper } from "./logger.js";
 import wantedRepoInstance from "./wantedRepo.js";
@@ -122,21 +123,21 @@ const ocrHandler = async (
   ContextImageJpg,
   LicensePlateImageJpg
 ) => {
-  // let resizedBuffer;
+  let resizedBuffer;
 
-  // try {
-  //   resizedBuffer = await sharp(Buffer.from(LicensePlateImageJpg, "base64"))
-  //     .resize({ width: 1000 })
-  //     .jpeg()
-  //     .toBuffer();
-  // } catch (err) {
-  //   console.log("sharp error:", err);
-  // }
+  try {
+    resizedBuffer = await sharp(Buffer.from(LicensePlateImageJpg, "base64"))
+      .resize({ width: 500 })
+      .jpeg()
+      .toBuffer();
+  } catch (err) {
+    console.log("sharp error:", err);
+  }
 
   const licensePlateImageRef = await imageUploader(
     LicensePlate,
-    LicensePlateImageJpg
-    // resizedBuffer ? resizedBuffer.toString("base64") : LicensePlateImageJpg
+    // LicensePlateImageJpg
+    resizedBuffer ? resizedBuffer.toString("base64") : LicensePlateImageJpg
   );
 
   const arrayWantedOcr = await postImage(licensePlateImageRef);
