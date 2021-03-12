@@ -17,11 +17,7 @@ const formatAndValidatePlate = (plate) => {
   // remove whitespace and non alpha-numeric values
   const newPlate = plate.trim().replace(/\W/g, "");
 
-  // only return valid length plates
-  if (newPlate.length >= 6 && newPlate.length <= 7) {
-    return newPlate;
-  }
-  return null;
+  return newPlate;
 };
 
 const getImageToText = async (url) => {
@@ -32,22 +28,54 @@ const getImageToText = async (url) => {
 
     const { data } = res;
 
+    // // loop through the text values found and format and val
+    // data.recognitionResult.lines.forEach((line) => {
+    //   const formattedPlate = formatAndValidatePlate(line.text);
+
+    //   // the plate is either null or a valid string here
+    //   if (formattedPlate) {
+    //     console.log(`We need to validate this plate ${formattedPlate}`);
+    //     if (wantedRepoInstance.has(formattedPlate)) {
+    //       wantedPlates.push(formattedPlate);
+    //     }
+
+    //     // if the formatted plate isn't null then we can check the repo and eventually send the post request
+    //   } else {
+    //     console.log(`Skipping this invalid text ${line.text}`);
+    //   }
+    // });
     const wantedPlates = [];
-    // loop through the text values found and format and val
-    data.recognitionResult.lines.forEach((line) => {
-      const formattedPlate = formatAndValidatePlate(line.text);
+    data.recognitionResult.lines.forEach((line, index) => {
+      const formattedText = formatAndValidatePlate(line.text);
+      if (formattedText === null) return;
 
-      // the plate is either null or a valid string here
-      if (formattedPlate) {
-        console.log(`We need to validate this plate ${formattedPlate}`);
-        if (wantedRepoInstance.has(formattedPlate)) {
-          wantedPlates.push(formattedPlate);
-        }
-
-        // if the formatted plate isn't null then we can check the repo and eventually send the post request
-      } else {
-        console.log(`Skipping this invalid text ${line.text}`);
+      if (
+        formattedText.length >= 6 &&
+        formattedText.length <= 7 &&
+        wantedRepoInstance.has(formattedText)
+      ) {
+        console.log(`Found an OCR Wanted plate ${formattedText}`);
+        wantedPlates.push(formattedText);
+        return;
       }
+
+      console.log(`Skipping this invalid text ${formattedText}`);
+
+      const nextText = data[index + 1];
+      if (!nextText) return;
+
+      const concatPlate = formattedText + formatAndValidatePlate(nextText.text);
+
+      if (
+        concatPlate.length >= 6 &&
+        concatPlate.length <= 7 &&
+        wantedRepoInstance.has(concatPlate)
+      ) {
+        console.log(`Found an OCR Wanted plate ${concatPlate}`);
+        wantedPlates.push(concatPlate);
+        return;
+      }
+      console.log(`Skipping this invalid concat ${formattedText}`);
     });
     return wantedPlates;
   } catch (err) {
