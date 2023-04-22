@@ -13,7 +13,7 @@
   "dependencies": {
     "@azure/service-bus": "^7.0.3",
     "@azure/storage-blob": "^12.4.1",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "csv-parser": "^3.0.0",
     "sharp": "^0.27.2"
   },
